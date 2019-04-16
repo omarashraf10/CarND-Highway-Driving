@@ -1,6 +1,49 @@
 # CarND-Path-Planning-Project
 Self-Driving Car Engineer Nanodegree Program
    
+### Reflection.
+
+The code can be separated into three parts:
+
+Prediction line 254
+
+
+This part of the code deal with the sensor fusion data.
+
+Parse sensor data
+Check lanes of each detected cars and check their speed.
+Estimate other car's position after executing previous trajectory .
+Check if the car in front of us blocking traffic
+Check if there is a car to the right of us & range to see if we can make lane changes.
+Check if there is a car to the left of us & range to see if we can make lane changes.
+The parameter is hard coded to 30 meters in front and behind for the safe lane change check.
+
+Behavior line 292
+
+
+This part of the code deal with what to do:
+
+defined max_speed to 49.5 to drive under speed limit
+As the walk through video suggest, set max_acc to .224 to minize jerk requirement
+Check if the car in front of us is too close. If so, do lane change according to car_left,car_right value. It is defined in prediction part.
+If the speed is under max_speed, accelerate.
+In addition to my implementation, I could include back to center lane behavior when ever the vehicle sees middle lane is empty, but I don't think it is necessary. The vehicle just stays in the lane after it makes lane change for now.
+
+
+Trajectory line 317
+
+
+This part computes the trajectory of the vehicle based on decisions made from above.
+
+The walk through video is pretty much goes over how to generate the trajectory using splines. For this, you need spine.h included in the header of the file.Spline
+
+The last two points of the previous trajectory are used. If previous there are no previous trajectory, the cars current position is used line191. In addition, the Frenet helperfunction getXY() is used to get three points evenly 30 meters apart.
+
+To ke ep the calculation simple, the video suggested to convert coordinates to local car coordinates.
+
+The Spline make relatively easy to compute a smooth trajectory in 2D space. It is worth noticing change of the speed is accounted in Spline.
+
+   
 ### Simulator.
 You can download the Term3 Simulator which contains the Path Planning Project from the [releases tab (https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).  
 
